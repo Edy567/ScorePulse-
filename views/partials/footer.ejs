@@ -1,0 +1,15 @@
+  <script>
+    const picker = document.getElementById('datePicker');
+    if (picker) {
+      picker.addEventListener('change', (e) => {
+        const d = e.target.value;
+        if (d) {
+          const url = new URL(window.location.href);
+          url.searchParams.set('date', d);
+          window.location.href = url.toString();
+        }
+      });
+    }
+  </script>
+</body>
+</html>

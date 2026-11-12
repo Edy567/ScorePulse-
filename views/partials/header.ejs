@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ScorePulse | Meciuri Fotbal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="min-h-screen flex flex-col pb-8">
+
+  <% 
+    const currentLeague = typeof activeLeague !== 'undefined' ? activeLeague : 'all';
+    const currentDate = typeof selectedDate !== 'undefined' ? selectedDate : '';
+    const dateText = (typeof displayDate !== 'undefined' && displayDate) ? displayDate : currentDate;
+    const prev = typeof prevDate !== 'undefined' ? prevDate : '';
+    const next = typeof nextDate !== 'undefined' ? nextDate : '';
+    const today = typeof todayDate !== 'undefined' ? todayDate : '';
+  %>
+
+  <header class="sticky top-0 z-50 backdrop-blur-xl bg-[#0c0306]/80 border-b border-white/5 px-4 py-3">
+    <div class="max-w-2xl mx-auto flex items-center justify-between">
+      
+      <a href="/?date=<%= today %>" class="flex items-center gap-2 group">
+        <div class="w-8 h-8 rounded-full bg-rose-600/20 border border-rose-500/40 flex items-center justify-center text-sm shadow-[0_0_12px_rgba(225,29,72,0.4)]">
+          ⚽
+        </div>
+        <span class="font-extrabold text-lg tracking-tight text-white flex items-center">
+          Score<span class="text-rose-500">Pulse</span>
+        </span>
+      </a>
+
+      <div class="flex items-center gap-1 bg-[#1a080f]/90 border border-white/10 rounded-full px-2 py-1 text-xs">
+        <a href="/?date=<%= prev %>&league=<%= currentLeague %>" 
+           title="Ziua precedentă"
+           class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-white rounded-full transition-colors">
+          &larr;
+        </a>
+
+        <div class="relative flex items-center px-1 font-semibold text-gray-200">
+          <span><%= dateText %></span>
+          <input 
+            type="date" 
+            id="datePicker" 
+            value="<%= currentDate %>" 
+            class="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
+          />
+        </div>
+
+        <a href="/?date=<%= next %>&league=<%= currentLeague %>" 
+           title="Ziua următoare"
+           class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-white rounded-full transition-colors">
+          &rarr;
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <section class="max-w-2xl mx-auto w-full px-4 pt-4 pb-2">
+    <div class="flex items-center gap-4 overflow-x-auto no-scrollbar py-2">
+      
+      <a href="/?date=<%= currentDate %>&league=all" class="flex flex-col items-center gap-1.5 flex-shrink-0 group">
+        <div class="league-circle <%= currentLeague === 'all' ? 'active' : '' %>">
+          <span class="text-lg">🏆</span>
+        </div>
+        <span class="text-[11px] font-medium <%= currentLeague === 'all' ? 'text-rose-400 font-semibold' : 'text-gray-400' %>">
+          Toate
+        </span>
+      </a>
+
+      <a href="/?date=<%= currentDate %>&league=CL" class="flex flex-col items-center gap-1.5 flex-shrink-0 group">
+        <div class="league-circle <%= currentLeague === 'CL' ? 'active' : '' %>">
+          <img src="https://crests.football-data.org/CL.png" alt="UCL" class="w-6 h-6 object-contain">
+        </div>
+        <span class="text-[11px] font-medium <%= currentLeague === 'CL' ? 'text-rose-400 font-semibold' : 'text-gray-400' %>">
+          UCL
+        </span>
+      </a>
+
+      <a href="/?date=<%= currentDate %>&league=PL" class="flex flex-col items-center gap-1.5 flex-shrink-0 group">
+        <div class="league-circle <%= currentLeague === 'PL' ? 'active' : '' %>">
+          <img src="https://crests.football-data.org/PL.png" alt="Premier League" class="w-6 h-6 object-contain">
+        </div>
+        <span class="text-[11px] font-medium <%= currentLeague === 'PL' ? 'text-rose-400 font-semibold' : 'text-gray-400' %>">
+          Premier
+        </span>
+      </a>
+
+      <a href="/?date=<%= currentDate %>&league=PD" class="flex flex-col items-center gap-1.5 flex-shrink-0 group">
+        <div class="league-circle <%= currentLeague === 'PD' ? 'active' : '' %>">
+          <img src="https://crests.football-data.org/laliga.png" alt="LaLiga" class="w-6 h-6 object-contain">
+        </div>
+        <span class="text-[11px] font-medium <%= currentLeague === 'PD' ? 'text-rose-400 font-semibold' : 'text-gray-400' %>">
+          LaLiga
+        </span>
+      </a>
+
+      <a href="/?date=<%= currentDate %>&league=SA" class="flex flex-col items-center gap-1.5 flex-shrink-0 group">
+        <div class="league-circle <%= currentLeague === 'SA' ? 'active' : '' %>">
+          <img src="https://crests.football-data.org/SA.png" alt="Serie A" class="w-6 h-6 object-contain">
+        </div>
+        <span class="text-[11px] font-medium <%= currentLeague === 'SA' ? 'text-rose-400 font-semibold' : 'text-gray-400' %>">
+          Serie A
+        </span>
+      </a>
+
+      <a href="/?date=<%= currentDate %>&league=BL1" class="flex flex-col items-center gap-1.5 flex-shrink-0 group">
+        <div class="league-circle <%= currentLeague === 'BL1' ? 'active' : '' %>">
+          <img src="https://crests.football-data.org/BL1.png" alt="Bundesliga" class="w-6 h-6 object-contain">
+        </div>
+        <span class="text-[11px] font-medium <%= currentLeague === 'BL1' ? 'text-rose-400 font-semibold' : 'text-gray-400' %>">
+          Bundesliga
+        </span>
+      </a>
+
+      <a href="/?date=<%= currentDate %>&league=EL" class="flex flex-col items-center gap-1.5 flex-shrink-0 group">
+        <div class="league-circle <%= currentLeague === 'EL' ? 'active' : '' %>">
+          <img src="https://crests.football-data.org/EL.png" alt="Europa League" class="w-6 h-6 object-contain">
+        </div>
+        <span class="text-[11px] font-medium <%= currentLeague === 'EL' ? 'text-rose-400 font-semibold' : 'text-gray-400' %>">
+          Europa
+        </span>
+      </a>
+
+    </div>
+  </section>

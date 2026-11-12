@@ -1,0 +1,63 @@
+<div class="goalline-card p-4">
+  <div class="grid grid-cols-5 items-center">
+    
+    <div class="col-span-1 flex flex-col items-center text-center">
+      <div class="w-10 h-10 flex items-center justify-center mb-1">
+        <img 
+          src="<%= match.homeTeam.crest %>" 
+          alt="<%= match.homeTeam.shortName || match.homeTeam.name %>" 
+          class="max-w-full max-h-full object-contain filter drop-shadow"
+          onerror="this.style.display='none'"
+        >
+      </div>
+      <span class="text-xs font-bold tracking-wider text-gray-200">
+        <%= match.homeTeam.tla || match.homeTeam.shortName || match.homeTeam.name.substring(0, 3).toUpperCase() %>
+      </span>
+    </div>
+
+    <div class="col-span-3 flex items-center justify-center gap-3">
+      <span class="score-number w-7 text-right">
+        <%= (match.score && match.score.fullTime && match.score.fullTime.home !== null) ? match.score.fullTime.home : '-' %>
+      </span>
+
+      <div class="flex flex-col items-center justify-center min-w-[70px]">
+        <span class="text-[10px] text-gray-400 font-medium mb-0.5 line-clamp-1">
+          <%= match.competition.name %>
+        </span>
+
+        <% if (['IN_PLAY', 'PAUSED'].includes(match.status)) { %>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-600 text-white animate-pulse">
+            LIVE <%= match.minute || '' %>
+          </span>
+        <% } else if (match.status === 'FINISHED') { %>
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-white/10 text-gray-300">
+            FT
+          </span>
+        <% } else { %>
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#260c14] border border-rose-500/20 text-rose-300">
+            <%= match.time %>
+          </span>
+        <% } %>
+      </div>
+
+      <span class="score-number w-7 text-left">
+        <%= (match.score && match.score.fullTime && match.score.fullTime.away !== null) ? match.score.fullTime.away : '-' %>
+      </span>
+    </div>
+
+    <div class="col-span-1 flex flex-col items-center text-center">
+      <div class="w-10 h-10 flex items-center justify-center mb-1">
+        <img 
+          src="<%= match.awayTeam.crest %>" 
+          alt="<%= match.awayTeam.shortName || match.awayTeam.name %>" 
+          class="max-w-full max-h-full object-contain filter drop-shadow"
+          onerror="this.style.display='none'"
+        >
+      </div>
+      <span class="text-xs font-bold tracking-wider text-gray-200">
+        <%= match.awayTeam.tla || match.awayTeam.shortName || match.awayTeam.name.substring(0, 3).toUpperCase() %>
+      </span>
+    </div>
+
+  </div>
+</div>

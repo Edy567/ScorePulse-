@@ -1,0 +1,125 @@
+<div class="mb-6 space-y-4">
+  
+  <!-- Info Banner daca este in Mod Demo sau daca exista eroare API -->
+  <% if (isDemo && !hasApiKey) { %>
+    <div class="p-4 rounded-2xl bg-gradient-to-r from-blue-900/40 via-purple-900/30 to-gray-900/40 border border-purple-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-sm">
+      <div class="flex items-start gap-3">
+        <div class="p-2 bg-purple-500/20 text-purple-300 rounded-xl mt-0.5">
+          <i class="fas fa-info-circle text-base"></i>
+        </div>
+        <div>
+          <h4 class="font-bold text-white flex items-center gap-2">
+            Mod Demonstrativ Activ (Meciuri Simulate)
+          </h4>
+          <p class="text-xs text-gray-300 mt-0.5">
+            Vezi meciuri demonstrative și predicții AI gata generate. Pentru a prelua meciurile reale din ziua curentă, înregistrează-te gratuit (în 1 minut) pe 
+            <a href="https://www.football-data.org/client/register" target="_blank" rel="noopener" class="text-emerald-400 font-semibold underline hover:text-emerald-300">football-data.org</a> 
+            și pune cheia în fișierul <code class="bg-gray-800 px-1.5 py-0.5 rounded text-purple-300">.env</code> (<code class="text-xs">FOOTBALL_DATA_API_KEY=...</code>).
+          </p>
+        </div>
+      </div>
+      <a href="https://www.football-data.org/client/register" target="_blank" rel="noopener" 
+         class="whitespace-nowrap px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs transition-colors shadow-lg shadow-purple-600/30">
+        <i class="fas fa-key mr-1.5"></i> Ia Cheie Gratuită
+      </a>
+    </div>
+  <% } else if (apiError) { %>
+    <div class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <i class="fas fa-exclamation-triangle text-amber-400"></i>
+        <span><strong>Notă API:</strong> <%= apiError %></span>
+      </div>
+      <span class="text-[11px] text-amber-300/80">S-au încărcat datele de siguranță.</span>
+    </div>
+  <% } %>
+
+  <!-- Bara de Căutare și Statistici rapide -->
+  <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+    
+    <!-- Input cautare echipa -->
+    <div class="relative flex-1 max-w-md">
+      <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
+      <input 
+        type="text" 
+        id="teamSearchInput" 
+        placeholder="Caută o echipă (ex: Arsenal, Real Madrid, Inter)..." 
+        class="w-full bg-gray-900/90 border border-gray-800 rounded-xl pl-10 pr-4 py-2 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-emerald-500 transition-colors"
+      />
+    </div>
+
+    <!-- Quick stats badge counters -->
+    <div class="flex items-center gap-2 flex-wrap text-xs">
+      <span class="px-3 py-1.5 rounded-xl bg-gray-900 border border-gray-800 text-gray-300">
+        <strong class="text-white"><%= stats.total %></strong> meciuri
+      </span>
+      <% if (stats.live > 0) { %>
+        <span class="px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center gap-1.5 font-semibold">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <%= stats.live %> LIVE
+        </span>
+      <% } %>
+      <span class="px-3 py-1.5 rounded-xl bg-gray-900 border border-gray-800 text-gray-300">
+        <strong class="text-cyan-400"><%= stats.upcoming %></strong> programate
+      </span>
+      <span class="px-3 py-1.5 rounded-xl bg-gray-900 border border-gray-800 text-gray-300">
+        <strong class="text-gray-400"><%= stats.finished %></strong> încheiate
+      </span>
+    </div>
+
+  </div>
+
+  <!-- Tab-uri Ligi / Competiții -->
+  <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+    
+    <!-- Buton 'Toate' -->
+    <a href="/?date=<%= selectedDate %>&league=all" 
+       class="whitespace-nowrap px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all <%= activeLeague === 'all' ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-gray-950 shadow-md shadow-emerald-500/20' : 'bg-gray-900/80 hover:bg-gray-800 text-gray-300 border border-gray-800' %>">
+      <span>🏆</span>
+      <span>Toate Ligile</span>
+    </a>
+
+    <!-- Premier League -->
+    <a href="/?date=<%= selectedDate %>&league=PL" 
+       class="whitespace-nowrap px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all <%= activeLeague === 'PL' ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md shadow-purple-500/20' : 'bg-gray-900/80 hover:bg-gray-800 text-gray-300 border border-gray-800' %>">
+      <span>🇬🇧</span>
+      <span>Premier League</span>
+    </a>
+
+    <!-- La Liga -->
+    <a href="/?date=<%= selectedDate %>&league=PD" 
+       class="whitespace-nowrap px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all <%= activeLeague === 'PD' ? 'bg-gradient-to-r from-amber-500 to-red-500 text-gray-950 font-bold shadow-md shadow-amber-500/20' : 'bg-gray-900/80 hover:bg-gray-800 text-gray-300 border border-gray-800' %>">
+      <span>🇪🇸</span>
+      <span>La Liga</span>
+    </a>
+
+    <!-- Serie A -->
+    <a href="/?date=<%= selectedDate %>&league=SA" 
+       class="whitespace-nowrap px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all <%= activeLeague === 'SA' ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-md shadow-blue-500/20' : 'bg-gray-900/80 hover:bg-gray-800 text-gray-300 border border-gray-800' %>">
+      <span>🇮🇹</span>
+      <span>Serie A</span>
+    </a>
+
+    <!-- Bundesliga -->
+    <a href="/?date=<%= selectedDate %>&league=BL1" 
+       class="whitespace-nowrap px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all <%= activeLeague === 'BL1' ? 'bg-gradient-to-r from-red-600 to-orange-600 text-white shadow-md shadow-red-500/20' : 'bg-gray-900/80 hover:bg-gray-800 text-gray-300 border border-gray-800' %>">
+      <span>🇩🇪</span>
+      <span>Bundesliga</span>
+    </a>
+
+    <!-- UEFA Champions League -->
+    <a href="/?date=<%= selectedDate %>&league=CL" 
+       class="whitespace-nowrap px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all <%= activeLeague === 'CL' ? 'bg-gradient-to-r from-blue-900 via-indigo-700 to-blue-500 text-white shadow-md shadow-blue-700/30' : 'bg-gray-900/80 hover:bg-gray-800 text-gray-300 border border-gray-800' %>">
+      <span>⭐</span>
+      <span>Champions League</span>
+    </a>
+
+    <!-- UEFA Europa League -->
+    <a href="/?date=<%= selectedDate %>&league=EL" 
+       class="whitespace-nowrap px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all <%= activeLeague === 'EL' ? 'bg-gradient-to-r from-amber-600 to-orange-500 text-white shadow-md shadow-amber-600/30' : 'bg-gray-900/80 hover:bg-gray-800 text-gray-300 border border-gray-800' %>">
+      <span>🟠</span>
+      <span>Europa League</span>
+    </a>
+
+  </div>
+
+</div>

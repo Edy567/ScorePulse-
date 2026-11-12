@@ -1,0 +1,89 @@
+<%- include('partials/header') %>
+
+<% 
+  const count = (typeof matchesCount !== 'undefined') ? matchesCount : ((typeof totalCount !== 'undefined') ? totalCount : 0);
+  const groups = (typeof groupedMatches !== 'undefined') ? groupedMatches : {};
+  const dateFormatted = (typeof displayDate !== 'undefined') ? displayDate : '';
+  const nextDate = (typeof nextMatchDate !== 'undefined') ? nextMatchDate : null;
+  const nextDisplay = (typeof nextMatchDateDisplay !== 'undefined') ? nextMatchDateDisplay : '';
+  const leagueName = (typeof competitions !== 'undefined' && competitions[activeLeague]) ? competitions[activeLeague].name : 'competițiile selectate';
+%>
+
+<main class="max-w-2xl w-full mx-auto px-4 py-4 flex-1">
+
+  <div class="flex items-center justify-between mb-4">
+    <div class="flex items-center gap-2">
+      <h1 class="text-2xl font-extrabold text-white tracking-tight">
+        Matches
+      </h1>
+      <span class="text-xs text-rose-400 font-semibold px-2 py-0.5 rounded-full bg-rose-500/10 border border-rose-500/20">
+        <%= count %>
+      </span>
+    </div>
+
+    <span class="text-xs text-gray-400 font-medium">
+      <%= dateFormatted %>
+    </span>
+  </div>
+
+  <% if (count > 0 && Object.keys(groups).length > 0) { %>
+    
+    <% Object.keys(groups).forEach(compName => { %>
+      <section class="mb-6">
+        
+        <div class="flex items-center gap-2 mb-2.5 px-1">
+          <% if (groups[compName].competition && groups[compName].competition.badge) { %>
+            <img 
+              src="<%= groups[compName].competition.badge %>" 
+              alt="<%= compName %>" 
+              class="w-4 h-4 object-contain"
+              onerror="this.style.display='none'"
+            >
+          <% } else if (groups[compName].competition) { %>
+            <span class="text-xs"><%= groups[compName].competition.flag %></span>
+          <% } %>
+          <h2 class="text-xs font-bold text-gray-300 tracking-wide">
+            <%= compName %>
+          </h2>
+        </div>
+
+        <div class="space-y-3">
+          <% (groups[compName].list || []).forEach(match => { %>
+            <%- include('partials/match-card', { match }) %>
+          <% }) %>
+        </div>
+
+      </section>
+    <% }) %>
+
+  <% } else { %>
+
+    <div class="goalline-card text-center py-12 px-6">
+      <div class="w-12 h-12 mx-auto rounded-full bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-xl mb-3">
+        ⚽
+      </div>
+      <h3 class="font-extrabold text-white text-base mb-1">
+        Niciun meci pe <%= dateFormatted %>
+      </h3>
+      <p class="text-xs text-gray-400 max-w-sm mx-auto mb-6 leading-relaxed">
+        Nu sunt programate meciuri în această zi pentru <%= leagueName %>.
+      </p>
+
+      <% if (nextDate) { %>
+        <div class="pt-4 border-t border-white/5 flex flex-col items-center gap-2">
+          <span class="text-[11px] text-gray-400">Următoarea zi cu meciuri:</span>
+          <a href="/?date=<%= nextDate %>&league=<%= activeLeague %>" 
+             class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs transition-colors shadow-lg shadow-rose-600/30 flex items-center gap-2">
+            <span>📅</span>
+            <span>Mergi la <%= nextDisplay %></span>
+            <span>&rarr;</span>
+          </a>
+        </div>
+      <% } %>
+    </div>
+
+  <% } %>
+
+</main>
+
+<%- include('partials/footer') %>
